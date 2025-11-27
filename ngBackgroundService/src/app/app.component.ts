@@ -32,13 +32,16 @@ export class AppComponent {
   isConnected = false;
   nbClicks = 0;
   // TODO: Ajouter 3 variables: Le multiplier, le multiplierCost, mais également le multiplierIntialCost pour remettre à jour multiplierCost après chaque fin de round (ou sinon on peut passer l'information dans l'appel qui vient du Hub!)
-
+  nbWins = 0;
+  multiplier = 1;
+  multiplierInitialCost = 10;
+  multiplierCost = this.multiplierInitialCost
   constructor(public account:AccountService){
   }
 
   Increment() {
     //TODO: Augmenter le nbClicks par la valeur du multiplicateur
-    this.nbClicks += 1;
+    this.nbClicks += this.multiplier;
     this.hubConnection!.invoke('Increment')
   }
 
@@ -87,6 +90,7 @@ export class AppComponent {
     this.hubConnection.on('GameInfo', (data:GameInfo) => {
       this.isConnected = true;
       // TODO: Mettre à jour les variables pour le coût du multiplier et le nbWins
+      this.nbWins = data.nbWins;
     });
 
     this.hubConnection.on('EndRound', (data:RoundResult) => {
@@ -94,6 +98,7 @@ export class AppComponent {
       // TODO: Reset du multiplierCost et le multiplier
 
       // TODO: Si le joueur a gagné, on augmene nbWins
+      this.nbWins++
 
       if(data.nbClicks > 0){
         let phrase = " a gagné avec ";
