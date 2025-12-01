@@ -1,4 +1,5 @@
-﻿using BackgroundService.Data;
+﻿using System.Numerics;
+using BackgroundService.Data;
 using BackgroundService.DTOs;
 using BackgroundService.Models;
 using BackgroundService.Services;
@@ -28,8 +29,8 @@ namespace BackgroundService.Hubs
 
             await Clients.Caller.SendAsync("GameInfo", new GameInfoDTO()
             {
-                // TODO: Remplir l'information avec les 2 nouveaux features (nbWins et multiplierCost)
                 NbWins = player.NbWins,
+                MultiplierCost = Game.MULTIPLIER_BASE_PRICE
             });
         }
 
@@ -48,10 +49,6 @@ namespace BackgroundService.Hubs
         public async Task BuyMultiplier()
         {
             _game.BuyMultiplier(Context.UserIdentifier!);
-            await Clients.Caller.SendAsync("GameInfo", new GameInfoDTO()
-            {
-
-            });
         }
     }
 }
